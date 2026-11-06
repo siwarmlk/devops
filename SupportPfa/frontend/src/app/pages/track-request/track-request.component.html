@@ -1,0 +1,112 @@
+<section class="card">
+
+  <h2>Suivre une demande</h2>
+
+  <p class="subtitle">
+
+    Collez le code reçu après votre envoi (par exemple <span class="mono">SUP-ABCD123456</span>).
+
+  </p>
+
+
+
+  <div class="track-row">
+
+    <label class="code-label">
+
+      Code de suivi
+
+      <input
+
+        type="text"
+
+        class="code-input"
+
+        [ngModel]="codeInput()"
+
+        (ngModelChange)="codeInput.set($event)"
+
+        (keyup.enter)="search()"
+
+        placeholder="SUP-…"
+
+        autocomplete="off"
+
+        spellcheck="false"
+
+      />
+
+    </label>
+
+    <button type="button" class="search-btn" (click)="search()" [disabled]="isLoading()">
+
+      {{ isLoading() ? 'Recherche…' : 'Consulter' }}
+
+    </button>
+
+  </div>
+
+
+
+  @if (errorMessage()) {
+
+    <p class="error">{{ errorMessage() }}</p>
+
+  }
+
+
+
+  @if (result(); as t) {
+
+    <div class="result">
+
+      <h3>État de la demande</h3>
+
+      <p class="result-title">{{ t.title }}</p>
+
+      <p class="result-meta">Catégorie : {{ categoryDisplayLabel[t.category] || t.category }}</p>
+
+      <p class="result-code">Code : <span class="mono">{{ t.trackingCode }}</span></p>
+
+
+
+      <div class="status-badge" [class.done]="isTreated(t.status)">
+
+        {{ statusLabel(t.status) }}
+
+      </div>
+
+
+
+      @if (isTreated(t.status)) {
+
+        <p class="hint ok">Cette demande a été clôturée par l'équipe.</p>
+
+      } @else {
+
+        <p class="hint">L'équipe traite encore cette demande.</p>
+
+      }
+
+
+
+      <p class="dates">
+
+        Créée {{ t.createdAt | date : 'short' }} — Mise à jour {{ t.updatedAt | date : 'short' }}
+
+      </p>
+
+    </div>
+
+  }
+
+
+
+  <p class="back-link">
+
+    <a routerLink="/support-request">Envoyer une autre demande</a>
+
+  </p>
+
+</section>
+

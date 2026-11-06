@@ -1,0 +1,60 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --color-navy: #1e2d4a;
+  --color-navy-deep: #141d2e;
+  --color-navy-mid: #2a3f66;
+  --color-beige: #f3eadb;
+  --color-beige-warm: #e8dcc8;
+  --color-beige-surface: #faf6ef;
+  --color-bg: var(--color-beige);
+  --color-surface: #fffcf7;
+  --color-text: #141d2e;
+  --color-text-muted: #5c6578;
+  --color-border: #e0d5c4;
+  --color-accent: var(--color-navy-mid);
+  --color-accent-deep: var(--color-navy);
+  --color-violet: var(--color-navy-mid);
+  --color-violet-deep: var(--color-navy-deep);
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-sm: 0 1px 2px rgba(20, 29, 46, 0.06);
+  --shadow-md: 0 8px 24px rgba(20, 29, 46, 0.1);
+  --shadow-lg: 0 20px 50px rgba(20, 29, 46, 0.12);
+  --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  --transition-fast: 0.18s var(--ease-in-out);
+  --transition-med: 0.28s var(--ease-in-out);
+  --gradient-page: linear-gradient(165deg, #efe6d8 0%, var(--color-beige) 32%, var(--color-beige-surface) 65%, #fffcf7 100%);
+  --gradient-cta: linear-gradient(135deg, var(--color-navy-mid) 0%, var(--color-navy-deep) 100%);
+  --gradient-cta-hover: linear-gradient(135deg, #35507a 0%, #243552 100%);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--gradient-page);
+  background-attachment: fixed;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}

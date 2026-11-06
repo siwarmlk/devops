@@ -1,0 +1,158 @@
+<section class="admin">
+  <header class="admin__head">
+    <div>
+      <h2>Espace administrateur</h2>
+      <p class="subtitle">
+         <strong>admin</strong>  <strong>admin123</strong> 
+      </p>
+    </div>
+    <nav class="admin-nav" aria-label="Administration">
+      <button type="button" class="tab" [class.tab--active]="view() === 'dashboard'" (click)="setView('dashboard')">
+        Tableau de bord
+      </button>
+      <button type="button" class="tab" [class.tab--active]="view() === 'agents'" (click)="setView('agents')">
+        Agents
+      </button>
+      <button type="button" class="tab" [class.tab--active]="view() === 'tickets'" (click)="setView('tickets')">
+        Tickets
+      </button>
+      <button type="button" class="tab" [class.tab--active]="view() === 'settings'" (click)="setView('settings')">
+        Paramètres
+      </button>
+    </nav>
+  </header>
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+  @if (message()) {
+    <p class="success">{{ message() }}</p>
+  }
+
+  @if (view() === 'dashboard') {
+    <section class="card card--dash">
+      <h3>Résumé</h3>
+      @if (dashboard(); as d) {
+        <div class="kpi-grid">
+          <div class="kpi">
+            <span class="kpi__label">Tickets au total</span>
+            <span class="kpi__value">{{ d.totalTickets }}</span>
+          </div>
+          <div class="kpi">
+            <span class="kpi__label">Tickets ouverts</span>
+            <span class="kpi__value">{{ d.openTickets }}</span>
+          </div>
+          <div class="kpi">
+            <span class="kpi__label">Tickets clos</span>
+            <span class="kpi__value">{{ d.closedTickets }}</span>
+          </div>
+          <div class="kpi">
+            <span class="kpi__label">Agents support</span>
+            <span class="kpi__value">{{ d.totalAgents }}</span>
+          </div>
+          <div class="kpi">
+            <span class="kpi__label">Catégories</span>
+            <span class="kpi__value">{{ d.totalCategories }}</span>
+          </div>
+          <div class="kpi kpi--wide">
+            <span class="kpi__label">Modèle de classification</span>
+            <span class="kpi__value kpi__value--sm">{{ d.modelSupervision.modelName }} v{{ d.modelSupervision.version }} — {{ d.modelSupervision.status }}</span>
+          </div>
+        </div>
+        <div class="dash-actions">
+          <button type="button" class="btn soft" (click)="setView('agents')">Gérer les agents</button>
+          <button type="button" class="btn soft" (click)="setView('tickets')">Voir les tickets</button>
+          <button type="button" class="btn ghost" (click)="setView('settings')">Paramètres avancés</button>
+        </div>
+      }
+    </section>
+  }
+
+  @if (view() === 'agents') {
+    <section class="card">
+      <h3>Gestion des agents support</h3>
+      <p class="help">Ajoutez un compte agent (connexion tableau Kanban comme le compte « support ») ou retirez-le de la liste.</p>
+      <div class="agent-create">
+        <input type="text" [(ngModel)]="newAgent.username" placeholder="Identifiant agent" autocomplete="off" />
+        <input type="password" [(ngModel)]="newAgent.password" placeholder="Mot de passe" autocomplete="new-password" />
+        <button type="button" class="btn" (click)="createAgent()">Ajouter un agent</button>
+      </div>
+      <ul class="list">
+        @for (a of agents(); track agentRowId(a)) {
+          <li>
+            <span class="list__main">{{ a.username }}</span>
+            <button type="button" class="btn danger btn--sm" (click)="deleteAgent(agentRowId(a))">Supprimer</button>
+          </li>
+        } @empty {
+          <li class="list__empty">Aucun agent pour l’instant.</li>
+        }
+      </ul>
+    </section>
+  }
+
+  @if (view() === 'tickets') {
+    <section class="card">
+      <h3>Tous les tickets clients</h3>
+      <p class="help">Consultez le détail d’un ticket ou supprimez-le. Les données proviennent des demandes soumises publiquement.</p>
+      @if (tickets().length) {
+        <div class="table-wrap">
+          <table class="ticket-table">
+            <thead>
+              <tr>
+                <th>Titre</th>
+                <th>Client</th>
+                <th>Statut</th>
+                <th>Catégorie</th>
+                <th>Créé le</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (t of tickets(); track t._id) {
+                <tr>
+                  <td>{{ t.title }}</td>
+                  <td>{{ t.firstName }} {{ t.lastName }}</td>
+                  <td>{{ statusDisplayLabel[t.status] }}</td>
+                  <td>{{ categoryDisplayLabel[t.category] || t.category }}</td>
+                  <td>{{ t.createdAt | date: 'short' }}</td>
+                  <td class="ticket-table__actions">
+                    <a class="link-detail" [routerLink]="['/tickets', t._id]">Consulter</a>
+                    <button type="button" class="btn danger btn--sm" (click)="deleteTicket(t._id)">Supprimer</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <p class="empty-hint">Aucun ticket en base.</p>
+      }
+    </section>
+  }
+
+  @if (view() === 'settings') {
+    <section class="card">
+      <h3>Catégories de tickets</h3>
+      <p class="help">Une catégorie par ligne — utilisées lors de la création publique d’un ticket.</p>
+      <textarea rows="8" [(ngModel)]="categoriesText" placeholder="Une catégorie par ligne"></textarea>
+      <button type="button" class="btn" (click)="saveCategories()">Enregistrer les catégories</button>
+    </section>
+
+    <section class="card">
+      <h3>Supervision du modèle de classification</h3>
+      @if (model(); as m) {
+        <div class="model-grid">
+          <label>Nom du modèle <input type="text" [(ngModel)]="m.modelName" /></label>
+          <label>Version <input type="text" [(ngModel)]="m.version" /></label>
+          <label>Statut <input type="text" [(ngModel)]="m.status" /></label>
+          <label>Accuracy <input type="number" step="0.01" [(ngModel)]="m.accuracy" /></label>
+          <label>Precision <input type="number" step="0.01" [(ngModel)]="m.precision" /></label>
+          <label>Rappel <input type="number" step="0.01" [(ngModel)]="m.recall" /></label>
+        </div>
+        <label>Dernière évaluation <input type="datetime-local" [(ngModel)]="m.lastEvaluationAt" /></label>
+        <label>Notes <textarea rows="3" [(ngModel)]="m.notes"></textarea></label>
+        <button type="button" class="btn" (click)="saveModelSupervision()">Enregistrer</button>
+      }
+    </section>
+  }
+</section>

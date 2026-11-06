@@ -1,0 +1,55 @@
+<main class="layout" [class.layout--home]="appZone() === 'home'">
+  @if (appZone() === 'client') {
+    <header class="shell shell-client">
+      <div class="shell-brand">
+        <a routerLink="/" class="brand-title">Gestionnaire de tickets d'assistance</a>
+        <span class="shell-badge">Espace client</span>
+      </div>
+      <nav class="shell-nav">
+        <a routerLink="/support-request" routerLinkActive="active-link">Nouvelle demande</a>
+        <a routerLink="/suivi-demande" routerLinkActive="active-link">Suivi de demande</a>
+        <a routerLink="/" class="link-quiet">Accueil</a>
+      </nav>
+    </header>
+  } @else if (appZone() === 'agent') {
+    <header class="shell shell-agent">
+      <div class="shell-brand">
+        <a routerLink="/" class="brand-title">Gestionnaire de tickets d'assistance</a>
+        <span class="shell-badge shell-badge-agent">Espace agent</span>
+      </div>
+      <nav class="shell-nav">
+        @if (auth.currentUser()) {
+          <a routerLink="/kanban" routerLinkActive="active-link">Tableau</a>
+          @if (auth.currentUser()?.role === 'admin') {
+            <a routerLink="/admin" routerLinkActive="active-link">Admin</a>
+          }
+          <button type="button" class="nav-btn" (click)="logout()">Déconnexion</button>
+        } @else {
+          <a routerLink="/login" routerLinkActive="active-link">Connexion</a>
+        }
+        <a routerLink="/" class="link-quiet">Accueil</a>
+      </nav>
+    </header>
+  } @else if (appZone() === 'admin') {
+    <header class="shell shell-admin">
+      <div class="shell-brand">
+        <a routerLink="/" class="brand-title">Gestionnaire de tickets d'assistance</a>
+        <span class="shell-badge shell-badge-agent">Espace administrateur</span>
+      </div>
+      <nav class="shell-nav">
+        @if (auth.currentUser()) {
+          <a routerLink="/admin" routerLinkActive="active-link">Dashboard admin</a>
+          <a routerLink="/kanban" routerLinkActive="active-link">Espace agent</a>
+          <button type="button" class="nav-btn" (click)="logout()">Déconnexion</button>
+        } @else {
+          <a routerLink="/login" routerLinkActive="active-link">Connexion</a>
+        }
+        <a routerLink="/" class="link-quiet">Accueil</a>
+      </nav>
+    </header>
+  }
+
+  <section class="page-content">
+    <router-outlet />
+  </section>
+</main>

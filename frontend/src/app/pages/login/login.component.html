@@ -1,0 +1,38 @@
+<section class="card">
+  <h2>Connexion</h2>
+  <p class="subtitle">
+    Agents support et administrateurs : identifiant et mot de passe fournis par votre administrateur système.
+    Les clients créent une demande depuis l'accueil sans compte.
+  </p>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  <div class="form-stack">
+    <label>
+      Identifiant
+      <input type="text" [(ngModel)]="credentials.username" autocomplete="username" />
+    </label>
+    <label>
+      Mot de passe
+      <input
+        type="password"
+        [(ngModel)]="credentials.password"
+        autocomplete="current-password"
+      />
+    </label>
+  </div>
+
+  <button class="primary-btn" type="button" (click)="login()" [disabled]="isSubmitting()">
+    {{ isSubmitting() ? 'Connexion…' : 'Se connecter' }}
+  </button>
+
+  <p class="hint">
+    Comptes par défaut (si inchangés dans <code>.env</code>) :
+    <strong>support</strong> / <strong>support123</strong> (agent) ·
+    <strong>admin</strong> / <strong>admin123</strong> (administrateur — accès <a routerLink="/admin">/admin</a>).
+  </p>
+
+  <a class="back-link" routerLink="/">Retour à l'accueil</a>
+</section>

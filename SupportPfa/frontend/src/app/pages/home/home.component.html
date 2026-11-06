@@ -1,0 +1,182 @@
+<div class="home">
+  <header class="top-nav">
+    <div class="top-nav__inner">
+      <a routerLink="/" class="brand">
+        <span class="brand__mark" aria-hidden="true"></span>
+        <span class="brand__text">Gestionnaire de tickets d'assistance</span>
+      </a>
+      <nav class="top-nav__links" aria-label="Navigation principale"></nav>
+    </div>
+  </header>
+
+  <main class="home-main">
+    <section class="hero">
+      <p class="hero__eyebrow">Ticketing, sans le superflu</p>
+      <h1 class="hero__title">
+        <span class="hero__brand">Gestionnaire de tickets d'assistance</span>
+        <span class="hero__headline">Un lieu pour les demandes. Un flux serein pour votre équipe.</span>
+      </h1>
+      <p class="hero__subtitle">
+        Que vous déposiez un incident ou que vous traitiez la file, tout reste structuré, lisible et
+        actionnable — sans encombrement ni zone d'ombre.
+      </p>
+    </section>
+
+    <div class="panels">
+      <article class="panel panel--client">
+        <div class="panel__top">
+          <span class="badge badge--client">Client</span>
+          <div class="panel__icon panel__icon--client" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+            </svg>
+          </div>
+        </div>
+        <h2 class="panel__title" id="title-client">Pour les clients</h2>
+        <p class="panel__desc">
+          Déposez une demande claire en quelques minutes, puis consultez l'avancement à tout moment avec votre
+          code de suivi — sans compte de votre côté.
+        </p>
+        <ul class="actions">
+          <li>
+            <a routerLink="/support-request" class="btn btn-gradient">Ouvrir un ticket</a>
+          </li>
+          <li>
+            <a routerLink="/suivi-demande" class="btn btn-soft">Suivre une demande</a>
+          </li>
+        </ul>
+      </article>
+
+      <article class="panel panel--agent">
+        <div class="panel__top">
+          <span class="badge badge--agent">Agent</span>
+          <div class="panel__icon panel__icon--agent" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+            </svg>
+          </div>
+        </div>
+        <h2 class="panel__title" id="title-agent">Pour votre équipe support</h2>
+        <p class="panel__desc">
+          Connectez-vous pour prendre en charge les demandes depuis un tableau simple, faire avancer les tickets
+          et garder le contexte au même endroit — pour ne rien laisser passer.
+        </p>
+        <ul class="actions">
+          @if (auth.currentUser()) {
+            <li>
+              <a routerLink="/kanban" class="btn btn-gradient btn-gradient--agent">Aller au tableau</a>
+            </li>
+            @if (auth.currentUser()?.role === 'admin') {
+              <li>
+                <a routerLink="/admin" class="btn btn-soft">Tableau de bord admin</a>
+              </li>
+            }
+            <li>
+              <p class="panel__hint">
+                Connecté en tant que <strong>{{ auth.currentUser()?.username }}</strong>
+              </p>
+            </li>
+            <li>
+              <button type="button" class="btn btn-outline-navy" (click)="logout()">Se déconnecter</button>
+            </li>
+          } @else {
+            <li>
+              <a routerLink="/login" [queryParams]="{ returnUrl: '/kanban' }" class="btn btn-gradient btn-gradient--agent">
+                Connexion — espace agent
+              </a>
+            </li>
+            <li>
+              <p class="panel__hint panel__hint--muted">
+                Après une connexion réussie, vous serez redirigé vers le tableau des tickets.
+              </p>
+            </li>
+          }
+        </ul>
+      </article>
+
+      <article class="panel panel--admin">
+        <div class="panel__top">
+          <span class="badge badge--agent">Administrateur</span>
+          <div class="panel__icon panel__icon--agent" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9m-9 6h9m-9 6h9M4.5 6h.008v.008H4.5V6Zm0 6h.008v.008H4.5V12Zm0 6h.008v.008H4.5V18Z" />
+            </svg>
+          </div>
+        </div>
+        <h2 class="panel__title">Espace administrateur</h2>
+        <p class="panel__desc">
+          
+         
+        </p>
+        <ul class="actions">
+          @if (auth.currentUser()?.role === 'admin') {
+            <li>
+              <a routerLink="/admin" class="btn btn-gradient btn-gradient--agent">Accéder au tableau de bord</a>
+            </li>
+          } @else {
+            <li>
+              <a routerLink="/login" [queryParams]="{ returnUrl: '/admin' }" class="btn btn-gradient btn-gradient--agent">
+                Connexion administrateur
+              </a>
+            </li>
+          }
+        </ul>
+      </article>
+    </div>
+
+    <section class="features" aria-labelledby="features-heading">
+      <h2 id="features-heading" class="features__heading">Pourquoi cette plateforme ?</h2>
+      <p class="features__lede">
+        Pensée pour les petites équipes qui veulent la clarté des grands outils, sans la complexité.
+      </p>
+      <div class="features__grid">
+        <div class="feature">
+          <div class="feature__icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5 10.5 6.75 14.25 10.5 20.25 4.5M20.25 4.5h-4.5M20.25 4.5v4.5" />
+            </svg>
+          </div>
+          <h3 class="feature__title">Traitement rapide des tickets</h3>
+          <p class="feature__text">Triez vite, attribuez sereinement et gardez le rythme de la première réponse jusqu'à la clôture.</p>
+        </div>
+        <div class="feature">
+          <div class="feature__icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
+            </svg>
+          </div>
+          <h3 class="feature__title">Suivi en temps réel</h3>
+          <p class="feature__text">Les clients voient où en est leur demande — les statuts restent visibles et explicites.</p>
+        </div>
+        <div class="feature">
+          <div class="feature__icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .778-.332 48.294 48.294 0 0 0 5.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+            </svg>
+          </div>
+          <h3 class="feature__title">Échanges simples</h3>
+          <p class="feature__text">Gardez l'historique sur le ticket pour que chaque réponse reste claire et alignée.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div class="site-footer__brand">
+        <p class="site-footer__name">Gestionnaire de tickets d'assistance</p>
+        <p class="site-footer__tagline">Un flux moderne et posé pour les demandes clients et le suivi interne.</p>
+      </div>
+      <nav class="site-footer__nav" aria-label="Pied de page">
+        <a href="mailto:support@example.com" class="site-footer__link">Contact</a>
+        <a routerLink="/support-request" class="site-footer__link">Aide</a>
+        <a routerLink="/" class="site-footer__link" fragment="privacy">Confidentialité</a>
+      </nav>
+      <p id="privacy" class="site-footer__privacy">
+        Nous utilisons vos données uniquement pour traiter les demandes et améliorer le produit — jamais revendues
+        à des tiers.
+      </p>
+      <p class="site-footer__copy">&copy; {{ currentYear }} Gestionnaire de tickets d'assistance. Tous droits réservés.</p>
+    </div>
+  </footer>
+</div>

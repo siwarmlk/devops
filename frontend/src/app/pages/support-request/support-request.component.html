@@ -1,0 +1,60 @@
+<section class="card">
+  <h2>Nouvelle demande d'assistance</h2>
+  <p class="subtitle">Indiquez qui vous êtes et votre besoin — des informations claires nous aident à répondre plus vite.</p>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+  @if (successMessage()) {
+    <p class="success">{{ successMessage() }}</p>
+  }
+  @if (lastTrackingCode(); as code) {
+    <div class="tracking-box">
+      <p class="tracking-label">Votre code de suivi</p>
+      <p class="tracking-code">{{ code }}</p>
+      <p class="tracking-hint">Conservez-le pour consulter l'avancement sur la page de suivi.</p>
+      <a class="tracking-link" routerLink="/suivi-demande" [queryParams]="{ code }">Ouvrir le suivi</a>
+    </div>
+  }
+
+  <h3 class="section-title">Vos coordonnées</h3>
+  <div class="form-grid">
+    <label>
+      Prénom
+      <input type="text" [(ngModel)]="form.firstName" placeholder="Camille" />
+    </label>
+    <label>
+      Nom
+      <input type="text" [(ngModel)]="form.lastName" placeholder="Martin" />
+    </label>
+    <label>
+      Téléphone
+      <input type="tel" [(ngModel)]="form.phone" placeholder="+33 6 12 34 56 78" />
+    </label>
+    <label>
+      E-mail
+      <input type="email" [(ngModel)]="form.email" placeholder="camille@exemple.fr" />
+    </label>
+  </div>
+
+  <h3 class="section-title">En quoi pouvons-nous vous aider ?</h3>
+  <div class="form-grid">
+    <label class="full-width">
+      Titre
+      <input type="text" [(ngModel)]="form.title" placeholder="ex. Impossible de réinitialiser mon mot de passe" />
+    </label>
+
+    <label class="full-width">
+      Description
+      <textarea
+        rows="4"
+        [(ngModel)]="form.description"
+        placeholder="Ce qui s'est passé, ce que vous attendiez, et les étapes utiles pour reproduire le problème…"
+      ></textarea>
+    </label>
+  </div>
+
+  <button class="create-btn" type="button" (click)="createTicket()" [disabled]="isSubmitting()">
+    {{ isSubmitting() ? 'Envoi…' : 'Envoyer la demande' }}
+  </button>
+</section>
